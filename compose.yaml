@@ -1,0 +1,100 @@
+
+services:
+  postgres:
+  #https://hub.docker.com/_/postgres?_gl=1*mvnlqo*_gcl_au*MTA5NDY5MDU4MS4xNzE5MDYyNTE0*_ga*MTk2MDc3NjkzMS4xNzE5MDYyNTE1*_ga_XJWPQMJYHQ*MTcxOTE0NDAyNC42LjEuMTcxOTE0NDc2Ny42MC4wLjA.
+    
+    container_name: ${DB_HOST}
+    image: 'postgres:latest'
+
+    # set shared memory limit when using docker-compose
+    #shm_size: 128mb
+
+    environment:
+      PGDATA: '/var/lib/postgresql/data/pgdata'
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      #POSTGRES_PASSWORD_FILE: '/run/secrets/db_password'
+      
+    #secrets:
+    #   - db_password
+
+    volumes:
+      - './pgdata:/var/lib/postgresql/data/pgdata'
+
+    networks:
+      - backend_net
+
+    ports:
+      - ${DB_PORT}:5432
+    #expose:
+    #  - 5432
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -p ${DB_PORT}"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      
+    restart: always
+
+  mvn_backend:
+    container_name: ${BACKEND_HOST}
+    # relative path interpreted as relative to the location of the Compose file.
+    # https://docs.docker.com/compose/compose-file/build/
+    build:
+      context: ./depo23_srv
+      dockerfile: Dockerfile_mvn
+    
+    # https://docs.docker.com/compose/profiles/ 
+    # Command line: 'docker compose --prifile mvn up -d'
+    profiles:
+      - mvn
+    
+    environment:
+      DB_NAME: ${DB_NAME}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+
+    networks:
+      - backend_net
+
+    # syntax [HOST:]CONTAINER[/PROTOCOL]
+    ports:
+      - '8080:8080'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    
+  jar_backend:
+    build:
+      context: ./depo23_srv
+      dockerfile: Dockerfile_jre
+    
+    profiles:
+      - jar
+
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      
+    networks:
+      - backend_net
+
+    ports:
+      - '8080:8080'
+      
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+#secrets:
+#   db_password:
+#     file: db_password.txt
+
+volumes:
+  pg_data:
+
+networks:
+  backend_net:
