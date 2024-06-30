@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Trade</title>
+    <style>
+        div {
+            margin-bottom: 10px;
+        }
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body style="background-color: lightgray">
+<div>
+    <p><a href="/trades">Back</a></p>
+</div>
+<div>
+    <h2> [[${title}]] </h2>
+    <div>
+        <form action="#" th:action="@{/trades/save}" th:object="${trade}" method="post">
+            <div>
+                <div>
+                    <label for="tradeDate">DATE</label>
+                    <input type="date" th:field="*{tradeDate}" id="tradeDate"/>
+                </div>
+                <div>
+                    <label for="accountId">ACCOUNT</label>
+                    <input type="text" th:field="*{accountId}" id="accountId"/>
+                </div>
+                <div>
+                    <label for="secId">ISIN</label>
+                    <input type="text" th:field="*{secId}" id="secId">
+                </div>
+                <div>
+                    <label for="tradeType">OPERATION</label>
+                    <input type="text" th:field="*{tradeType}" id="tradeType"/>
+                </div>
+                <div>
+                    <label for="qty">QUANTITY</label>
+                    <input type="number" th:field="*{qty}" id="qty"/>
+                </div>
+                <div>
+                    <label for="price">PRICE</label>
+                    <input type="number" th:field="*{price}" id="price"/>
+                </div>
+            </div>
+            <div >
+                <input type="hidden" th:field="*{id}" />
+                <input type="submit" value="Save" /> <input type="reset" value="Reset" />
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
