@@ -1,5 +1,8 @@
-# depo23
-my pet project
+# depo23_srv
+spring-boot app
+
+before run at local host export evarimenal variables
+$> export $(xargs < .env) && env | grep "DB_" 
 
 
 # depo23_client
