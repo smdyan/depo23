@@ -27,7 +27,20 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      
+    restart: always
+  
+  pgadmin:
+    container_name: pgadmin4
+    image: dpage/pgadmin4:7
+    profiles:
+      - pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_MAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
     restart: always
 
   mvn_backend:
@@ -79,6 +92,7 @@ services:
 
 volumes:
   pg_data:
+  pgadmin_data:
 
 #networks:
 #  backend_net:
