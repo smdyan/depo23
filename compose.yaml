@@ -16,8 +16,8 @@ services:
     #   - db_password
     volumes:
       - './pgdata:/var/lib/postgresql/data/pgdata'
-    #networks:
-    #  - backend_net
+    networks:
+      - backend_net
     ports:
       - ${DB_PORT}:5432
     #expose:
@@ -37,6 +37,8 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_MAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    networks:
+      - backend_net
     ports:
       - "5050:80"
     volumes:
@@ -61,27 +63,12 @@ services:
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
-    #networks:
-    #  - backend_net
+    networks:
+      - backend_net
+      - swag_depo_net
     # syntax [HOST:]CONTAINER[/PROTOCOL]
     ports:
       - '8080:8080'
-    depends_on:
-      postgres:
-        condition: service_healthy
-    
-  jar_backend:
-    build:
-      context: ./depo23_srv
-      dockerfile: Dockerfile_jre   
-    profiles:
-      - jar
-    environment:
-      POSTGRES_DB: ${DB_NAME}    
-    #networks:
-    #  - backend_net
-    ports:
-      - '8080:8080'   
     depends_on:
       postgres:
         condition: service_healthy
@@ -94,5 +81,9 @@ volumes:
   pg_data:
   pgadmin_data:
 
-#networks:
-#  backend_net:
+networks:
+  backend_net:
+  swag_depo_net:
+    name: swag_depo_net
+    driver: bridge
+    external: true
