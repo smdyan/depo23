@@ -1,5 +1,5 @@
 FROM eclipse-temurin:17-jdk-focal
- 
+EXPOSE 8080
 WORKDIR /depo23_srv
  
 COPY .mvn/ .mvn
