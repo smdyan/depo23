@@ -17,7 +17,7 @@ services:
     volumes:
       - './pgdata:/var/lib/postgresql/data/pgdata'
     networks:
-      - backend_net
+      - dbnet
     ports:
       - ${DB_PORT}:5432
     #expose:
@@ -38,7 +38,8 @@ services:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_MAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
     networks:
-      - backend_net
+      - vps_mynet
+      - dbnet
     ports:
       - "5050:80"
     volumes:
@@ -64,14 +65,12 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
     networks:
-      - backend_net
-      - swag_depo_net
-    # syntax [HOST:]CONTAINER[/PROTOCOL]
-    ports:
-      - '8080:8080'
+      - vps_mynet
+      - dbnet
     depends_on:
       postgres:
         condition: service_healthy
+    restart: always
 
 #secrets:
 #   db_password:
@@ -82,8 +81,7 @@ volumes:
   pgadmin_data:
 
 networks:
-  backend_net:
-  swag_depo_net:
-    name: swag_depo_net
-    driver: bridge
+  dbnet:
+  vps_mynet:
+    name: vps_mynet
     external: true
