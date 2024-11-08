@@ -1,6 +1,6 @@
 
 services:
-  postgres:
+  db:
   #https://hub.docker.com/_/postgres?_gl=1*mvnlqo*_gcl_au*MTA5NDY5MDU4MS4xNzE5MDYyNTE0*_ga*MTk2MDc3NjkzMS4xNzE5MDYyNTE1*_ga_XJWPQMJYHQ*MTcxOTE0NDAyNC42LjEuMTcxOTE0NDc2Ny42MC4wLjA. 
     container_name: ${DB_HOST}
     image: 'postgres:latest'
@@ -10,7 +10,7 @@ services:
       PGDATA: '/var/lib/postgresql/data/pgdata'
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_PASSWORD: ${DB_PASS}
       #POSTGRES_PASSWORD_FILE: '/run/secrets/db_password'   
     #secrets:
     #   - db_password
@@ -36,7 +36,7 @@ services:
       - pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_MAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASS}
     networks:
       - vps_mynet
       - dbnet
@@ -46,7 +46,7 @@ services:
       - pgadmin_data:/var/lib/pgadmin
     restart: always
 
-  mvn_backend:
+  api:
     container_name: ${BACKEND_HOST}
     # relative path interpreted as relative to the location of the Compose file.
     # https://docs.docker.com/compose/compose-file/build/
@@ -56,25 +56,21 @@ services:
     # https://docs.docker.com/compose/profiles/ 
     # Command line: 'docker compose --prifile mvn up -d'
     profiles:
-      - mvn  
+      - api  
     environment:
       DB_NAME: ${DB_NAME}
       DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT}
       DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
+      DB_PASSWORD: ${DB_PASS}
       SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
     networks:
-      - vps_mynet
+      - mynet
       - dbnet
     depends_on:
       postgres:
         condition: service_healthy
     restart: always
-
-#secrets:
-#   db_password:
-#     file: db_password.txt
 
 volumes:
   pg_data:
@@ -82,6 +78,6 @@ volumes:
 
 networks:
   dbnet:
-  vps_mynet:
-    name: vps_mynet
+  mynet:
+    name: mynet
     external: true

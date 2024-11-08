@@ -4,6 +4,11 @@ spring-boot app
 before run at local host export evarimenal variables
 $> export $(xargs < .env) && env | grep "DB_" 
 
+run at localhost in Docker containers
+docker compose --profile mvn up -d
+
+run at localhost wo Docker. Need start DB first.
+./mvnw spring-boot:run 
 
 # depo23_client
 
