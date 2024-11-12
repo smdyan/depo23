@@ -20,7 +20,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/bonds")
-@CrossOrigin("http://localhost:8080/")
+@CrossOrigin("*")
 public class BondController { //Bean will be registered in app context
     private final BondRepository repository; //Injection
     private final BondModelAssembler assembler;
