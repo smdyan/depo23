@@ -94,5 +94,5 @@ volumes:
 networks:
   dbnet:
   mynet:
-    name: mynet
+    name: vps_mynet
     external: true
