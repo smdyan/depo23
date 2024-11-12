@@ -54,7 +54,7 @@ services:
       context: ./depo23_srv
       dockerfile: Dockerfile_mvn   
     # https://docs.docker.com/compose/profiles/ 
-    # Command line: 'docker compose --prifile mvn up -d'
+    # Command line: 'docker compose --prifile api up -d'
     profiles:
       - api  
     environment:
@@ -69,8 +69,22 @@ services:
         ipv4_address: 172.22.0.22
       dbnet:
     depends_on:
-      postgres:
+      db:
         condition: service_healthy
+    restart: always
+  
+  cli:
+    container_name: vue
+    build:
+      context: ./depo23_vue
+      dockerfile: Dockerfile_vue
+    profiles:
+      - vue
+    networks:
+      mynet:
+        ipv4_address: 172.22.0.23
+    depends_on:
+      - api
     restart: always
 
 volumes:

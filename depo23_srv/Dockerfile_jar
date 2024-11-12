@@ -1,4 +1,0 @@
-FROM eclipse-temurin:21
-WORKDIR /depo23_srv
-COPY target/depo23_srv-0.0.1-SNAPSHOT.jar ./
-CMD ["java", "-jar", "depo23_srv-0.0.1-SNAPSHOT.jar"]
