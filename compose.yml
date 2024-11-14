@@ -16,7 +16,7 @@ services:
       dbnet:
         ipv4_address: ${DB_ADDR}
     ports:
-      - ${DB_PORT}:5432
+      - ${DB_PORT}:5432 #required for access via localhost
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -p ${DB_PORT}"]
       interval: 5s
@@ -78,6 +78,8 @@ services:
     networks:
       mynet:
         ipv4_address: 172.22.0.23
+    ports:
+      - 80:80
     restart: always
 
 volumes:

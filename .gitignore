@@ -7,6 +7,7 @@ pgdata/
 .DS_Store
 HELP.md
 ELP.md
+compose_local_db.yml
 
 ### maven ###
 target/

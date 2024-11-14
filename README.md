@@ -1,3 +1,5 @@
+docker compose --profile api --profile cli up -d --build
+
 # depo23_srv
 spring-boot app
 
