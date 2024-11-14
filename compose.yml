@@ -78,8 +78,6 @@ services:
     networks:
       mynet:
         ipv4_address: 172.22.0.23
-    ports:
-      - 8082:80
     restart: always
 
 volumes:
