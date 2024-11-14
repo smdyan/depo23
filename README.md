@@ -3,14 +3,15 @@ docker compose --profile api --profile cli up -d --build
 # depo23_srv
 spring-boot app
 
-before run at local host export evarimenal variables
-$> export $(xargs < .env) && env | grep "DB_" 
+Before run at local host export evarimenal variables to particular terminal process.
+export $(cat .env | xargs)
 
-run at localhost in Docker containers
-docker compose --profile mvn up -d
+Run at localhost in Docker containers
+docker compose --profile api up -d --build
 
-run at localhost wo Docker. Need start DB first.
-./mvnw spring-boot:run 
+Run at localhost wo Docker. Need start DB first.
+./mvnw spring-boot:run #maven-wrapper
+mvn spring-boot:run #maven installed
 
 # depo23_client
 
